@@ -1,0 +1,15 @@
+select a,  t4.     56 , b,\"xyz\" from t1 , t2 where t1  . x > t2.p and y=   'sadsdsvfsdvf' and z = \"abc\"or t2 .   x;
+
+select repeat('a',200),id,data from t2 limit 2;
+
+select a,b,m from t1,t2 where d=10 and e='xyz' and f=\"hello\";
+
+select a,b from t1,t2 where roll>9 and id<5;
+
+select a,b,c,l,m,n,x,y,z from table1 as T1, table2 as T2, table3 as T3 where T1.b = 1 and T1.c = 'cat' and T2.m = T2.n UNION select roll,id from table4 where roll>9 and id <5;
+
+SELECT 1 AS status FROM ip_safe WHERE ip_start <= 921793386 AND ip_end >= 921793386  UNION SELECT 1 AS status FROM agent_safe WHERE 'curl/7.21.0 (x86_64-pc-linux-gnu) libcurl/7.21.0 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.15 libssh2/1.2.6, 9e610345-e06e-4636-aa17-f935a78d1346' LIKE CONCAT('%', api_key, '%') AND active = 1;
+
+SELECT ss.secondaryKeyword FROM site s  INNER JOIN site_state st ON st.site = s.siteId LEFT JOIN site_seo ss ON ss.siteId = s.siteId LEFT JOIN site_noalert na ON na.site = s.siteId LEFT JOIN site_rating sr ON sr.site = s.siteId INNER JOIN ( SELECT siteId AS site FROM site s WHERE s.domain = 'catalogfavorites.com' UNION ALL SELECT site FROM site_alias sa WHERE sa.alias = 'catalogfavorites.com') alias ON alias.site = s.siteId
+
+select c.couponId, c.offerTitle, c.code, c.description, c.printableImagePath,c.couponType, c.score, c.votes, c.created, c.submitter, c.featured, c.superFeature, c.superFeatureStart, c.voteHistory, c.rank, c.expires, c.exclusive, c.madreId,u.userid, u.preferredUsername as username, u.photo as  userimage, @expired_count := if(c.expires < '2012-12-27', @expired_count + 1, @expired_count) as expired_count from coupon c inner join (select @expired_count := 0) dummy  left join user u on u.userId = c.user  where c.site = 289269 and (c.startDate is null or c.startDate <= '2012-12-27') and (c.couponType <> 'printable' or (printableImagePath <> '' and moderated = 'Y')) and ('N' != 'Y' or featured = 'Y' or superFeature = 'Y') and ('N' = 'N' or featured = 'Y' or superFeature = 'Y' or moderated = 'Y') and ((c.neverShowBefore is null OR c.neverShowBefore <= now()) and (c.neverShowAfter is null OR c.neverShowAfter >= now()))  and (c.expires is null or c.expires >= '2012-12-27' or @expired_count < 10) order by c.rank DESC, created DESC LIMIT 250
