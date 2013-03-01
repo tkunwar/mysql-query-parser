@@ -136,7 +136,8 @@ bool is_token_reserved(std::string token) {
  * @return true/false indicating whether this token is an operator or not.
  */
 bool is_token_operator(std::string token) {
-	char operators[] = { '+', '-', '\\', '*', '=', '.', '<', '>', ':','!', '\0' };
+	char operators[] =
+			{ '+', '-', '\\', '*', '=', '.', '<', '>', ':', '!', '\0' };
 	unsigned int number_of_operators = strlen(operators);
 	for (unsigned int i = 0; i < number_of_operators; i++) {
 		if (token[0] == operators[i])
@@ -207,7 +208,7 @@ std::string get_next_token(std::string *input, unsigned int* index) {
 	 * them is encountered. Note that they themselves are tokens as well.
 	 */
 	char token_separators[] = { ',', '+', '.', '-', '*', '\\', '=', '(', ')',
-			'<', '>', ';', ':','!', '\0' };
+			'<', '>', ';', ':', '!', '\0' };
 	int number_of_token_separators = strlen(token_separators);
 	//find tokens
 	for (; *index < (*input).length(); (*index)++) {
@@ -277,7 +278,7 @@ std::string get_next_token(std::string *input, unsigned int* index) {
 			}
 		}
 		/*
-		 * 6. default case. if none of above conditions were satisfied then
+		 * 5. default case. if none of above conditions were satisfied then
 		 * this character is a part of token.
 		 *
 		 * Also note that we will eat spaces in beginning of a token not after it.
@@ -292,7 +293,7 @@ std::string get_next_token(std::string *input, unsigned int* index) {
 			return token;
 		}
 
-		//5. Eat out spaces/delimiters.
+		//6. Eat out spaces/delimiters.
 		if ((*input)[*index] == ' ') {
 			(*index)++;
 			while (((*input)[*index] == ' ') and (*index < (*input).length())) {
@@ -405,9 +406,11 @@ std::string find_table_name_of_alias_tblname(
 			return it->table_name;
 		}
 	}
-	// if we could not find a table_name for the alias name asked then it could be
-	// of form ..from t1,t2 where t1.x > t2.y . in this case t1 is the name of
-	// table itself so return the alias name itself
+	/*
+	 * if we could not find a table_name for the alias name asked then it could be
+	 * of form ..from t1,t2 where t1.x > t2.y . in this case t1 is the name of
+	 * table itself so return the alias name itself
+	 */
 	return alias_name;
 }
 /**
@@ -450,13 +453,13 @@ void print_final_result(struct TblColList *res) {
 	std::cout << "Table name list: ";
 	for (std::list<std::string>::iterator it = res->mTblNameList.begin();
 			it != res->mTblNameList.end(); it++) {
-		std::cout << "["<<*it <<"]"<< " ";
+		std::cout << "[" << *it << "]" << " ";
 	}
 	std::cout << std::endl;
 	std::cout << "Table_name with col_name: ";
 	for (std::list<std::string>::iterator it = res->mTblColNameList.begin();
 			it != res->mTblColNameList.end(); it++) {
-		std::cout <<"[" <<*it<<"]" << " ";
+		std::cout << "[" << *it << "]" << " ";
 	}
 	std::cout << std::endl;
 }
@@ -496,15 +499,13 @@ std::string get_next_valid_token(std::string *query, unsigned int* index) {
 			// we still need a valid token
 			return "";
 		}
-		//if we are here then current_token is ")" now read next_token
-		// so far we have only eaten CONCAT block. it's not for sure that next
-		// block is a valid one.
-		// is this recursive block correct ?
+		/*
+		 * if we are here then current_token is ")" now read next_token
+		 * so far we have only eaten CONCAT block. it's not for sure that next
+		 * block is a valid one.
+		 * is this recursive block correct ?
+		 */
 		current_token = get_next_valid_token(query, index);
-		//ensure that it's valid one
-//		while (!is_valid_token(current_token) and *index < query->length() ) {
-//				current_token = get_next_token(query, index);
-//			}
 	} else if (convert_to_uppercase(current_token) == "MAX") {
 		/*
 		 * MAx(coulmn_name) is a keyword that gives a column name in round
@@ -645,17 +646,16 @@ struct TblColList* ProcessQuery(std::string queryStr) {
 		if (current_token == ")") {
 			//now time to pop back what we stored in stack
 			if (query_state_stack.empty()) {
-//				std::cerr << "State stack empty ! Inconsistent state !!"
-//						<< std::endl;
-//				return pRes;
 				continue;
 			}
 
 			if (query_state_stack.top().select_triggered_query_state_change
 					== true) {
-				// if the state saved at stack was triggered by SELECT then only
-				// do a state save and pop
-				//pop and save state into current variables
+				/*
+				 * if the state saved at stack was triggered by SELECT then only
+				 * do a state save and pop
+				 * pop and save state into current variables
+				 */
 				table_name_list = (query_state_stack.top().table_name_list);
 				current_state = (query_state_stack.top()).current_state;
 				previous_state = (query_state_stack.top()).previous_state;
